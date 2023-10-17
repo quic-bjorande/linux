@@ -1500,9 +1500,6 @@ static int dwc3_flattening_init(void)
 	int overlay_ovcs;
 	int ret;
 
-	/* TODO: Remove kill-switch as dwc3-qcom is migrated to qcom,snps-dwc */
-	return 0;
-
 	match = of_match_node(dwc3_flatten_of_match, of_root);
 	if (!match)
 		return 0;
