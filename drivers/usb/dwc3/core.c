@@ -2130,7 +2130,7 @@ static int dwc3_get_num_ports(struct dwc3 *dwc)
 	return 0;
 }
 
-int dwc3_init(struct dwc3 *dwc, struct resource *res)
+int dwc3_init(struct dwc3 *dwc, struct resource *res, bool ignore_clocks_and_resets)
 {
 	struct device		*dev = dwc->dev;
 	struct resource		dwc_res;
@@ -2173,15 +2173,17 @@ int dwc3_init(struct dwc3 *dwc, struct resource *res)
 
 	dwc3_get_software_properties(dwc);
 
-	dwc->reset = devm_reset_control_array_get_optional_shared(dev);
-	if (IS_ERR(dwc->reset)) {
-		ret = PTR_ERR(dwc->reset);
-		goto err_put_psy;
-	}
+	if (!ignore_clocks_and_resets) {
+		dwc->reset = devm_reset_control_array_get_optional_shared(dev);
+		if (IS_ERR(dwc->reset)) {
+			ret = PTR_ERR(dwc->reset);
+			goto err_put_psy;
+		}
 
-	ret = dwc3_get_clocks(dwc);
-	if (ret)
-		goto err_put_psy;
+		ret = dwc3_get_clocks(dwc);
+		if (ret)
+			goto err_put_psy;
+	}
 
 	ret = reset_control_deassert(dwc->reset);
 	if (ret)
@@ -2311,7 +2313,7 @@ static int dwc3_probe(struct platform_device *pdev)
 
 	dwc->dev = &pdev->dev;
 
-	return dwc3_init(dwc, res);
+	return dwc3_init(dwc, res, false);
 }
 
 void dwc3_uninit(struct dwc3 *dwc)

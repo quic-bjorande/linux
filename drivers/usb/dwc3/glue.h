@@ -9,7 +9,7 @@
 #include <linux/types.h>
 #include "core.h"
 
-int dwc3_init(struct dwc3 *dwc, struct resource *res);
+int dwc3_init(struct dwc3 *dwc, struct resource *res, bool ignore_clocks_and_resets);
 void dwc3_uninit(struct dwc3 *dwc);
 
 int dwc3_runtime_suspend(struct dwc3 *dwc);
