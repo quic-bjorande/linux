@@ -328,6 +328,7 @@ void __weak pcibios_bus_add_device(struct pci_dev *pdev) { }
  */
 void pci_bus_add_device(struct pci_dev *dev)
 {
+	struct pci_host_bridge *host = pci_find_host_bridge(dev->bus);
 	struct device_node *dn = dev->dev.of_node;
 	int retval;
 
@@ -352,7 +353,7 @@ void pci_bus_add_device(struct pci_dev *dev)
 
 	if (dev_of_node(&dev->dev) && pci_is_bridge(dev)) {
 		retval = of_platform_populate(dev_of_node(&dev->dev), NULL, NULL,
-					      &dev->dev);
+					      host->dev.parent);
 		if (retval)
 			pci_err(dev, "failed to populate child OF nodes (%d)\n",
 				retval);

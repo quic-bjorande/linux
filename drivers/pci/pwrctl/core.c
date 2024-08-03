@@ -11,6 +11,8 @@
 #include <linux/property.h>
 #include <linux/slab.h>
 
+#include "../pci.h"
+
 static int pci_pwrctl_notify(struct notifier_block *nb, unsigned long action,
 			     void *data)
 {
@@ -51,9 +53,14 @@ static int pci_pwrctl_notify(struct notifier_block *nb, unsigned long action,
 static void rescan_work_func(struct work_struct *work)
 {
 	struct pci_pwrctl *pwrctl = container_of(work, struct pci_pwrctl, work);
+	struct pci_bus *bus;
+
+	bus = pci_find_bus(of_get_pci_domain_nr(pwrctl->dev->parent->of_node), 0);
+	if (!bus)
+		return;
 
 	pci_lock_rescan_remove();
-	pci_rescan_bus(to_pci_dev(pwrctl->dev->parent)->bus);
+	pci_rescan_bus(bus);
 	pci_unlock_rescan_remove();
 }
 
