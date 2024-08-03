@@ -10,3 +10,10 @@ config PCI_PWRCTL_PWRSEQ
 	tristate
 	select POWER_SEQUENCING
 	select PCI_PWRCTL
+
+config PCI_PWRCTL_QPS615
+	tristate "PCI Power Control driver for QPS615"
+	select PCI_PWRCTL
+	help
+	  Say Y here to enable the pwrctl driver for Qualcomm
+	  QPS615 PCIe switch.
