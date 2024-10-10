@@ -267,9 +267,10 @@ static int qps615_pwrctl_set_l0s_l1_entry_delay(struct qps615_pwrctl_ctx *ctx,
 		ret = qps615_pwrctl_i2c_read(ctx->client, QPS615_EMBEDDED_ETH_DELAY, &rd_val);
 		if (ret)
 			return ret;
-		rd_val = u32_replace_bits(rd_val, units,
-					  is_l1 ?
-					  QPS615_ETH_L1_DELAY_MASK : QPS615_ETH_L0S_DELAY_MASK);
+		if (is_l1)
+			rd_val = u32_replace_bits(rd_val, units, QPS615_ETH_L1_DELAY_MASK);
+		else
+			rd_val = u32_replace_bits(rd_val, units, QPS615_ETH_L0S_DELAY_MASK);
 		return qps615_pwrctl_i2c_write(ctx->client, QPS615_EMBEDDED_ETH_DELAY, rd_val);
 	}
 
@@ -596,6 +597,8 @@ static int qps615_pwrctl_probe(struct platform_device *pdev)
 		if (ret)
 			return ret;
 	}
+
+	pci_pwrctl_init(&ctx->pwrctl, dev);
 
 	return devm_pci_pwrctl_device_set_ready(dev, &ctx->pwrctl);
 }
