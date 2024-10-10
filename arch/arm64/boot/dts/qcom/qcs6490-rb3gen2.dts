@@ -226,6 +226,32 @@
 		pinctrl-names = "default";
 		regulator-enable-ramp-delay = <10000>;
 	};
+
+	vreg-pcie0-1p05v {
+		compatible = "regulator-fixed";
+		regulator-name = "PCIE0_1.05V";
+		gpio = <&pm7250b_gpios 4 GPIO_ACTIVE_HIGH>;
+		regulator-min-microvolt = <1050000>;
+		regulator-max-microvolt = <1050000>;
+		enable-active-high;
+		pinctrl-0 = <&upd_pwr_en2_state>;
+		pinctrl-names = "default";
+
+		regulator-always-on;
+	};
+
+	vreg-pcie0_3p3v-dual {
+		compatible = "regulator-fixed";
+		regulator-name = "PCIE0_3.3V_Dual";
+		gpio = <&pm7250b_gpios 1 GPIO_ACTIVE_HIGH>;
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
+		enable-active-high;
+		pinctrl-0 = <&upd_pwr_en1_state>;
+		pinctrl-names = "default";
+
+		regulator-always-on;
+	};
 };
 
 &apps_rsc {
@@ -722,6 +748,32 @@
 	status = "okay";
 };
 
+&pcie1 {
+	perst-gpios = <&tlmm 2 GPIO_ACTIVE_LOW>;
+
+	pinctrl-0 = <&pcie1_reset_n>, <&pcie1_wake_n>;
+	pinctrl-names = "default";
+
+	iommu-map = <0x0 &apps_smmu 0x1c80 0x1>,
+		    <0x100 &apps_smmu 0x1c81 0x1>,
+		    <0x208 &apps_smmu 0x1c84 0x1>,
+		    <0x210 &apps_smmu 0x1c85 0x1>,
+		    <0x218 &apps_smmu 0x1c86 0x1>,
+		    <0x300 &apps_smmu 0x1c87 0x1>,
+		    <0x400 &apps_smmu 0x1c88 0x1>,
+		    <0x500 &apps_smmu 0x1c89 0x1>,
+		    <0x501 &apps_smmu 0x1c90 0x1>;
+
+	status = "okay";
+};
+
+&pcie1_phy {
+	vdda-phy-supply = <&vreg_l10c_0p88>;
+	vdda-pll-supply = <&vreg_l6b_1p2>;
+
+	status = "okay";
+};
+
 &pcieport {
 	pcie@0,0 {
 		compatible = "pci1179,0623";
@@ -742,6 +794,9 @@
 		qcom,qps615-controller = <&qps615_switch>;
 
 		reset-gpios = <&pm8350c_gpios 1 GPIO_ACTIVE_LOW>;
+
+		pinctrl-0 = <&qps615_resx_state>, <&upd_hub_rst_state>, <&usb_hub_reset_state>;
+		pinctrl-names = "default";
 
 		pcie@1,0 {
 			reg = <0x20800 0x0 0x0 0x0 0x0>;
@@ -901,6 +956,15 @@
 };
 
 &pm7250b_gpios {
+	upd_pwr_en1_state: upd-pwr-en1-state {
+		pins = "gpio1";
+		function = "normal";
+
+		output-enable;
+		input-disable;
+		power-source = <0>;
+	};
+
 	lt9611_rst_pin: lt9611-rst-state {
 		pins = "gpio2";
 		function = "normal";
@@ -909,9 +973,29 @@
 		input-disable;
 		power-source = <0>;
 	};
+
+	upd_pwr_en2_state: upd-pwr-en2-state {
+		pins = "gpio4";
+		function = "normal";
+
+		output-enable;
+		input-disable;
+		power-source = <0>;
+	};
+
 };
 
 &pm8350c_gpios {
+	qps615_resx_state: qps615-resetx-state {
+		pins = "gpio1";
+		function = "normal";
+
+		bias-disable;
+		input-disable;
+		output-enable;
+		power-source = <0>;
+	};
+
 	ntn_0p9_en: ntn-0p9-en-state {
 		pins = "gpio2";
 		function = "normal";
@@ -931,6 +1015,17 @@
 		output-enable;
 		power-source = <0>;
 	};
+
+	upd_hub_rst_state: upd-hub-rst-state {
+		pins = "gpio4";
+		function = "normal";
+
+		bias-disable;
+		input-disable;
+		output-enable;
+		output-high;
+		power-source = <0>;
+	};
 };
 
 &tlmm {
@@ -938,6 +1033,30 @@
 		pins = "gpio24";
 		function = "gpio";
 		drive-strength = <2>;
+		bias-disable;
+	};
+
+	pcie1_reset_n: pcie1-reset-n-state {
+		pins = "gpio2";
+		function = "gpio";
+		drive-strength = <16>;
+		output-low;
+		bias-disable;
+	};
+
+	pcie1_wake_n: pcie1-wake-n-state {
+		pins = "gpio3";
+		function = "gpio";
+		drive-strength = <2>;
+		bias-pull-up;
+	};
+
+	usb_hub_reset_state: usb-hub-reset-state {
+		pins = "gpio162";
+		function = "gpio";
+
+		drive-strength = <2>;
+		output-low;
 		bias-disable;
 	};
 };
