@@ -1,0 +1,15 @@
+# SPDX-License-Identifier: GPL-2.0
+
+config OF_OVERLAYS_DWC3_FLATTENING
+	bool "DeviceTree overlay for migrating DWC3 glue bindings"
+	depends on OF
+	select OF_DYNAMIC
+	select OF_OVERLAY
+	default USB_DWC3_QCOM
+	help
+	  This option enables the migration of the loaded DeviceTree from the
+	  binding that splits DWC3 representation in glue and core nodes (such
+	  as "qcom,dwc3"), to the unified binding ("qcom,snps-dwc3").
+
+	  Enable this if you intend to boot the Linux kernel on a system with a
+	  DeviceTree blob using the non-flattened binding.
