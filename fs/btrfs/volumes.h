@@ -417,6 +417,8 @@ struct btrfs_fs_devices {
 	bool seeding;
 	/* The mount needs to use a randomly generated fsid. */
 	bool temp_fsid;
+	/* Enable/disable the filesystem stats tracking. */
+	bool collect_fs_stats;
 
 	struct btrfs_fs_info *fs_info;
 	/* sysfs kobjects */
@@ -426,6 +428,9 @@ struct btrfs_fs_devices {
 	struct completion kobj_unregister;
 
 	enum btrfs_chunk_allocation_policy chunk_alloc_policy;
+
+	/* Track the number of blocks (sectors) read by the filesystem. */
+	struct percpu_counter stats_read_blocks;
 
 	/* Policy used to read the mirrored stripes. */
 	enum btrfs_read_policy read_policy;
