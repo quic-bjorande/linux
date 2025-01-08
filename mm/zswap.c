@@ -880,16 +880,16 @@ static int zswap_cpu_comp_dead(unsigned int cpu, struct hlist_node *node)
 	return 0;
 }
 
-/* Prevent CPU hotplug from freeing up the per-CPU acomp_ctx resources */
+/* Remain on the CPU while using its acomp_ctx to stop it from going offline */
 static struct crypto_acomp_ctx *acomp_ctx_get_cpu(struct crypto_acomp_ctx __percpu *acomp_ctx)
 {
-	cpus_read_lock();
+	migrate_disable();
 	return raw_cpu_ptr(acomp_ctx);
 }
 
 static void acomp_ctx_put_cpu(void)
 {
-	cpus_read_unlock();
+	migrate_enable();
 }
 
 static bool zswap_compress(struct page *page, struct zswap_entry *entry,
