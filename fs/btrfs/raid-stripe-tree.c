@@ -169,7 +169,6 @@ static int update_raid_extent_item(struct btrfs_trans_handle *trans,
 
 	write_extent_buffer(leaf, stripe_extent, btrfs_item_ptr_offset(leaf, slot),
 			    item_size);
-	btrfs_mark_buffer_dirty(trans, leaf);
 	btrfs_free_path(path);
 
 	return ret;
@@ -199,11 +198,7 @@ int btrfs_insert_one_raid_extent(struct btrfs_trans_handle *trans,
 	for (int i = 0; i < num_stripes; i++) {
 		u64 devid = bioc->stripes[i].dev->devid;
 		u64 physical = bioc->stripes[i].physical;
-		u64 length = bioc->stripes[i].length;
 		struct btrfs_raid_stride *raid_stride = &stripe_extent->strides[i];
-
-		if (length == 0)
-			length = bioc->size;
 
 		btrfs_set_stack_raid_stride_devid(raid_stride, devid);
 		btrfs_set_stack_raid_stride_physical(raid_stride, physical);
