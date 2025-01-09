@@ -1103,7 +1103,7 @@ static void gen9_dbuf_enable(struct intel_display *display)
 	slices_mask = BIT(DBUF_S1) | display->dbuf.enabled_slices;
 
 	if (DISPLAY_VER(display) >= 14)
-		intel_pmdemand_program_dbuf(dev_priv, slices_mask);
+		intel_pmdemand_program_dbuf(display, slices_mask);
 
 	/*
 	 * Just power up at least 1 slice, we will
@@ -1119,15 +1119,12 @@ static void gen9_dbuf_disable(struct intel_display *display)
 	gen9_dbuf_slices_update(dev_priv, 0);
 
 	if (DISPLAY_VER(display) >= 14)
-		intel_pmdemand_program_dbuf(dev_priv, 0);
+		intel_pmdemand_program_dbuf(display, 0);
 }
 
 static void gen12_dbuf_slices_config(struct intel_display *display)
 {
 	enum dbuf_slice slice;
-
-	if (display->platform.alderlake_p)
-		return;
 
 	for_each_dbuf_slice(display, slice)
 		intel_de_rmw(display, DBUF_CTL_S(slice),
@@ -1681,7 +1678,7 @@ static void icl_display_core_init(struct intel_display *display,
 	/* 4. Enable CDCLK. */
 	intel_cdclk_init_hw(display);
 
-	if (DISPLAY_VER(display) >= 12)
+	if (DISPLAY_VER(display) == 12 || display->platform.dg2)
 		gen12_dbuf_slices_config(display);
 
 	/* 5. Enable DBUF. */
