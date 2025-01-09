@@ -1558,7 +1558,7 @@ void folio_add_file_rmap_pmd(struct folio *folio, struct page *page,
 void folio_add_file_rmap_pud(struct folio *folio, struct page *page,
 		struct vm_area_struct *vma)
 {
-#ifdef CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD
+#if defined(CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD) && defined(CONFIG_PGTABLE_HAS_HUGE_LEAVES)
 	__folio_add_file_rmap(folio, page, HPAGE_PUD_NR, vma, RMAP_LEVEL_PUD);
 #else
 	WARN_ON_ONCE(true);
@@ -1690,7 +1690,7 @@ void folio_remove_rmap_pmd(struct folio *folio, struct page *page,
 void folio_remove_rmap_pud(struct folio *folio, struct page *page,
 		struct vm_area_struct *vma)
 {
-#ifdef CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD
+#if defined(CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD) && defined(CONFIG_PGTABLE_HAS_HUGE_LEAVES)
 	__folio_remove_rmap(folio, page, HPAGE_PUD_NR, vma, RMAP_LEVEL_PUD);
 #else
 	WARN_ON_ONCE(true);
