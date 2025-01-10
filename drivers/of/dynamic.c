@@ -1073,6 +1073,26 @@ int of_changeset_add_prop_bool(struct of_changeset *ocs, struct device_node *np,
 }
 EXPORT_SYMBOL_GPL(of_changeset_add_prop_bool);
 
+/**
+ * of_changeset_add_prop_copy() - Add a property with name and value copied
+ * from an existing property, to a changeset.
+ *
+ * @ocs:	changeset pointer
+ * @np:		device node pointer
+ * @prop:	existing property to copy
+ *
+ * Create a new property with name and value copied from a provided property,
+ * to a changeset.
+ *
+ * Return: 0 on success, a negative error value in case of an error.
+ */
+int of_changeset_add_prop_copy(struct of_changeset *ocs, struct device_node *np,
+			       const struct property *prop)
+{
+	return of_changeset_add_prop_helper(ocs, np, prop);
+}
+EXPORT_SYMBOL_GPL(of_changeset_add_prop_copy);
+
 static int of_changeset_update_prop_helper(struct of_changeset *ocs,
 					   struct device_node *np,
 					   const struct property *pp)

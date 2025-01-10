@@ -1667,6 +1667,9 @@ int of_changeset_update_prop_string(struct of_changeset *ocs,
 int of_changeset_add_prop_bool(struct of_changeset *ocs, struct device_node *np,
 			       const char *prop_name);
 
+int of_changeset_add_prop_copy(struct of_changeset *ocs, struct device_node *np,
+			       const struct property *prop);
+
 #else /* CONFIG_OF_DYNAMIC */
 static inline int of_reconfig_notifier_register(struct notifier_block *nb)
 {
