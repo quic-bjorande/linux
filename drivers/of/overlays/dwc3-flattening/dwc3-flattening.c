@@ -21,7 +21,49 @@ struct dwc3_overlay_data {
 	const char *migrate_match;
 };
 
+static const struct dwc3_overlay_data dwc3_qcom_ipq4018_overlay = {
+	.fdt = __dtb_dwc3_qcom_ipq4018_begin,
+	.end = __dtb_dwc3_qcom_ipq4018_end,
+	.migrate_match = "qcom,dwc3",
+};
+
+static const struct dwc3_overlay_data dwc3_qcom_ipq4018_8dev_jalapeno_overlay = {
+	.fdt = __dtb_dwc3_qcom_ipq4018_8dev_jalapeno_begin,
+	.end = __dtb_dwc3_qcom_ipq4018_8dev_jalapeno_end,
+	.migrate_match = "qcom,dwc3",
+};
+
+static const struct dwc3_overlay_data dwc3_qcom_ipq4019_overlay = {
+	.fdt = __dtb_dwc3_qcom_ipq4019_begin,
+	.end = __dtb_dwc3_qcom_ipq4019_end,
+	.migrate_match = "qcom,dwc3",
+};
+
+static const struct dwc3_overlay_data dwc3_qcom_ipq8064_overlay = {
+	.fdt = __dtb_dwc3_qcom_ipq8064_begin,
+	.end = __dtb_dwc3_qcom_ipq8064_end,
+	.migrate_match = "qcom,dwc3",
+};
+
+static const struct dwc3_overlay_data dwc3_qcom_sdx55_overlay = {
+	.fdt = __dtb_dwc3_qcom_sdx55_begin,
+	.end = __dtb_dwc3_qcom_sdx55_end,
+	.migrate_match = "qcom,dwc3",
+};
+
+static const struct dwc3_overlay_data dwc3_qcom_sdx65_overlay = {
+	.fdt = __dtb_dwc3_qcom_sdx65_begin,
+	.end = __dtb_dwc3_qcom_sdx65_end,
+	.migrate_match = "qcom,dwc3",
+};
+
 static const struct of_device_id dwc3_flatten_of_match[] = {
+	{ .compatible = "8dev,jalapeno", .data = &dwc3_qcom_ipq4018_8dev_jalapeno_overlay },
+	{ .compatible = "qcom,ipq4018", .data = &dwc3_qcom_ipq4018_overlay },
+	{ .compatible = "qcom,ipq4019", .data = &dwc3_qcom_ipq4019_overlay },
+	{ .compatible = "qcom,ipq8064", .data = &dwc3_qcom_ipq8064_overlay },
+	{ .compatible = "qcom,sdx55", .data = &dwc3_qcom_sdx55_overlay },
+	{ .compatible = "qcom,sdx65", .data = &dwc3_qcom_sdx65_overlay },
 	{}
 };
 
