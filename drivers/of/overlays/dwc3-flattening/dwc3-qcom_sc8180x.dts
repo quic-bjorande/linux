@@ -1,0 +1,109 @@
+// SPDX-License-Identifier: BSD-3-Clause
+/*
+ * Copyright (c) 2025 Qualcomm Innovation Center, Inc. All rights reserved.
+ */
+/dts-v1/;
+/plugin/;
+
+#include <dt-bindings/interrupt-controller/arm-gic.h>
+#include <dt-bindings/phy/phy-qcom-qmp.h>
+
+/ {
+	fragment@0 {
+		target-path = "/soc@0/usb@a4f8800";
+		#address-cells = <2>;
+		#size-cells = <2>;
+
+		__overlay__ {
+			compatible = "qcom,sc8180x-dwc3-mp", "qcom,snps-dwc3";
+			reg = <0 0x0a400000 0 0xd100>;
+			interrupts-extended = <&intc GIC_SPI 654 IRQ_TYPE_LEVEL_HIGH>,
+					      <&intc GIC_SPI 656 IRQ_TYPE_LEVEL_HIGH>,
+					      <&intc GIC_SPI 655 IRQ_TYPE_LEVEL_HIGH>,
+					      <&intc GIC_SPI 658 IRQ_TYPE_LEVEL_HIGH>,
+					      <&intc GIC_SPI 657 IRQ_TYPE_LEVEL_HIGH>,
+					      <&pdc 59 IRQ_TYPE_EDGE_BOTH>,
+					      <&pdc 46 IRQ_TYPE_EDGE_BOTH>,
+					      <&pdc 71 IRQ_TYPE_EDGE_BOTH>,
+					      <&pdc 68 IRQ_TYPE_EDGE_BOTH>,
+					      <&pdc 7 IRQ_TYPE_LEVEL_HIGH>,
+					      <&pdc 30 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-names = "dwc_usb3",
+					  "pwr_event_1",
+					  "pwr_event_2",
+					  "hs_phy_1",
+					  "hs_phy_2",
+					  "dp_hs_phy_1",
+					  "dm_hs_phy_1",
+					  "dp_hs_phy_2",
+					  "dm_hs_phy_2",
+					  "ss_phy_1",
+					  "ss_phy_2";
+			iommus = <&apps_smmu 0x60 0x0>;
+			phys = <&usb_mp_hsphy0>,
+			       <&usb_mp_qmpphy0>,
+			       <&usb_mp_hsphy1>,
+			       <&usb_mp_qmpphy1>;
+			phy-names = "usb2-0",
+				    "usb3-0",
+				    "usb2-1",
+				    "usb3-1";
+		};
+	};
+
+	fragment@1 {
+		target-path = "/soc@0/usb@a6f8800";
+		#address-cells = <2>;
+		#size-cells = <2>;
+
+		__overlay__ {
+			compatible = "qcom,sc8180x-dwc3", "qcom,snps-dwc3";
+			reg = <0 0x0a600000 0 0xd100>;
+			interrupts-extended = <&intc GIC_SPI 133 IRQ_TYPE_LEVEL_HIGH>,
+					      <&intc GIC_SPI 130 IRQ_TYPE_LEVEL_HIGH>,
+					      <&intc GIC_SPI 131 IRQ_TYPE_LEVEL_HIGH>,
+					      <&pdc 9 IRQ_TYPE_EDGE_BOTH>,
+					      <&pdc 8 IRQ_TYPE_EDGE_BOTH>,
+					      <&pdc 6 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-names = "dwc_usb3",
+					  "pwr_event",
+					  "hs_phy_irq",
+					  "dp_hs_phy_irq",
+					  "dm_hs_phy_irq",
+					  "ss_phy_irq";
+			iommus = <&apps_smmu 0x140 0x0>;
+			phys = <&usb_prim_hsphy>,
+			       <&usb_prim_qmpphy QMP_USB43DP_USB3_PHY>;
+			phy-names = "usb2-phy",
+				    "usb3-phy";
+		};
+	};
+
+	fragment@2 {
+		target-path = "/soc@0/usb@a8f8800";
+		#address-cells = <2>;
+		#size-cells = <2>;
+
+		__overlay__ {
+			compatible = "qcom,sc8180x-dwc3", "qcom,snps-dwc3";
+			reg = <0 0x0a800000 0 0xd100>;
+			interrupts-extended = <&intc GIC_SPI 138 IRQ_TYPE_LEVEL_HIGH>,
+					      <&intc GIC_SPI 135 IRQ_TYPE_LEVEL_HIGH>,
+					      <&intc GIC_SPI 136 IRQ_TYPE_LEVEL_HIGH>,
+					      <&pdc 11 IRQ_TYPE_EDGE_BOTH>,
+					      <&pdc 10 IRQ_TYPE_EDGE_BOTH>,
+					      <&pdc 40 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-names = "dwc_usb3",
+					  "pwr_event",
+					  "hs_phy_irq",
+					  "dp_hs_phy_irq",
+					  "dm_hs_phy_irq",
+					  "ss_phy_irq";
+			iommus = <&apps_smmu 0x160 0x0>;
+			phys = <&usb_sec_hsphy>,
+			       <&usb_sec_qmpphy QMP_USB43DP_USB3_PHY>;
+			phy-names = "usb2-phy",
+				    "usb3-phy";
+		};
+	};
+};

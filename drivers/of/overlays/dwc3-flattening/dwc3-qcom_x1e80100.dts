@@ -1,0 +1,153 @@
+// SPDX-License-Identifier: BSD-3-Clause
+/*
+ * Copyright (c) 2025 Qualcomm Innovation Center, Inc. All rights reserved.
+ */
+/dts-v1/;
+/plugin/;
+
+#include <dt-bindings/interrupt-controller/arm-gic.h>
+#include <dt-bindings/phy/phy-qcom-qmp.h>
+
+/ {
+	fragment@0 {
+		target-path = "/soc@0/usb@a0f8800";
+		#address-cells = <2>;
+		#size-cells = <2>;
+
+		__overlay__ {
+			compatible = "qcom,x1e80100-dwc3", "qcom,snps-dwc3";
+			reg = <0 0x0a000000 0 0xd100>;
+			interrupts-extended = <&intc GIC_SPI 353 IRQ_TYPE_LEVEL_HIGH>,
+					      <&intc GIC_SPI 370 IRQ_TYPE_LEVEL_HIGH>,
+					      <&pdc 58 IRQ_TYPE_EDGE_BOTH>,
+					      <&pdc 57 IRQ_TYPE_EDGE_BOTH>,
+					      <&pdc 10 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-names = "dwc_usb3",
+					  "pwr_event",
+					  "dp_hs_phy_irq",
+					  "dm_hs_phy_irq",
+					  "ss_phy_irq";
+			iommus = <&apps_smmu 0x14a0 0x0>;
+			phys = <&usb_1_ss2_hsphy>,
+			       <&usb_1_ss2_qmpphy QMP_USB43DP_USB3_PHY>;
+			phy-names = "usb2-phy",
+				    "usb3-phy";
+		};
+	};
+
+	fragment@1 {
+		target-path = "/soc@0/usb@a2f8800";
+		#address-cells = <2>;
+		#size-cells = <2>;
+
+		__overlay__ {
+			compatible = "qcom,x1e80100-dwc3", "qcom,snps-dwc3";
+			reg = <0 0x0a200000 0 0xd100>;
+			interrupts-extended = <&intc GIC_SPI 240 IRQ_TYPE_LEVEL_HIGH>,
+					      <&intc GIC_SPI 245 IRQ_TYPE_LEVEL_HIGH>,
+					      <&pdc 50 IRQ_TYPE_EDGE_BOTH>,
+					      <&pdc 49 IRQ_TYPE_EDGE_BOTH>;
+			interrupt-names = "dwc_usb3",
+					  "pwr_event",
+					  "dp_hs_phy_irq",
+					  "dm_hs_phy_irq";
+			iommus = <&apps_smmu 0x14e0 0x0>;
+			phys = <&usb_2_hsphy>;
+			phy-names = "usb2-phy";
+		};
+	};
+
+	fragment@2 {
+		target-path = "/soc@0/usb@a4f8800";
+		#address-cells = <2>;
+		#size-cells = <2>;
+
+		__overlay__ {
+			compatible = "qcom,x1e80100-dwc3-mp", "qcom,snps-dwc3";
+			reg = <0 0x0a400000 0 0xd100>;
+			interrupts-extended = <&intc GIC_SPI 307 IRQ_TYPE_LEVEL_HIGH>,
+					      <&intc GIC_SPI 313 IRQ_TYPE_LEVEL_HIGH>,
+					      <&intc GIC_SPI 314 IRQ_TYPE_LEVEL_HIGH>,
+					      <&intc GIC_SPI 309 IRQ_TYPE_LEVEL_HIGH>,
+					      <&intc GIC_SPI 312 IRQ_TYPE_LEVEL_HIGH>,
+					      <&pdc 52 IRQ_TYPE_EDGE_BOTH>,
+					      <&pdc 51 IRQ_TYPE_EDGE_BOTH>,
+					      <&pdc 54 IRQ_TYPE_EDGE_BOTH>,
+					      <&pdc 53 IRQ_TYPE_EDGE_BOTH>,
+					      <&pdc 55 IRQ_TYPE_LEVEL_HIGH>,
+					      <&pdc 56 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-names = "dwc_usb3",
+					  "pwr_event_1",
+					  "pwr_event_2",
+					  "hs_phy_1",
+					  "hs_phy_2",
+					  "dp_hs_phy_1",
+					  "dm_hs_phy_1",
+					  "dp_hs_phy_2",
+					  "dm_hs_phy_2",
+					  "ss_phy_1",
+					  "ss_phy_2";
+			iommus = <&apps_smmu 0x1400 0x0>;
+			phys = <&usb_mp_hsphy0>,
+			       <&usb_mp_qmpphy0>,
+			       <&usb_mp_hsphy1>,
+			       <&usb_mp_qmpphy1>;
+			phy-names = "usb2-0",
+				    "usb3-0",
+				    "usb2-1",
+				    "usb3-1";
+		};
+	};
+
+	fragment@3 {
+		target-path = "/soc@0/usb@a6f8800";
+		#address-cells = <2>;
+		#size-cells = <2>;
+
+		__overlay__ {
+			compatible = "qcom,x1e80100-dwc3", "qcom,snps-dwc3";
+			reg = <0 0x0a600000 0 0xd100>;
+			interrupts-extended = <&intc GIC_SPI 355 IRQ_TYPE_LEVEL_HIGH>,
+					      <&intc GIC_SPI 371 IRQ_TYPE_LEVEL_HIGH>,
+					      <&pdc 61 IRQ_TYPE_EDGE_BOTH>,
+					      <&pdc 15 IRQ_TYPE_EDGE_BOTH>,
+					      <&pdc 17 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-names = "dwc_usb3",
+					  "pwr_event",
+					  "dp_hs_phy_irq",
+					  "dm_hs_phy_irq",
+					  "ss_phy_irq";
+			iommus = <&apps_smmu 0x1420 0x0>;
+			phys = <&usb_1_ss0_hsphy>,
+			       <&usb_1_ss0_qmpphy QMP_USB43DP_USB3_PHY>;
+			phy-names = "usb2-phy",
+				    "usb3-phy";
+		};
+	};
+
+	fragment@4 {
+		target-path = "/soc@0/usb@a8f8800";
+		#address-cells = <2>;
+		#size-cells = <2>;
+
+		__overlay__ {
+			compatible = "qcom,x1e80100-dwc3", "qcom,snps-dwc3";
+			reg = <0 0x0a800000 0 0xd100>;
+			interrupts-extended = <&intc GIC_SPI 357 IRQ_TYPE_LEVEL_HIGH>,
+					      <&intc GIC_SPI 372 IRQ_TYPE_LEVEL_HIGH>,
+					      <&pdc 60 IRQ_TYPE_EDGE_BOTH>,
+					      <&pdc 11 IRQ_TYPE_EDGE_BOTH>,
+					      <&pdc 47 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-names = "dwc_usb3",
+					  "pwr_event",
+					  "dp_hs_phy_irq",
+					  "dm_hs_phy_irq",
+					  "ss_phy_irq";
+			iommus = <&apps_smmu 0x1460 0x0>;
+			phys = <&usb_1_ss1_hsphy>,
+			       <&usb_1_ss1_qmpphy QMP_USB43DP_USB3_PHY>;
+			phy-names = "usb2-phy",
+				    "usb3-phy";
+		};
+	};
+};

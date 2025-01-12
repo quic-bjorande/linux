@@ -1,0 +1,32 @@
+// SPDX-License-Identifier: BSD-3-Clause
+/*
+ * Copyright (c) 2025 Qualcomm Innovation Center, Inc. All rights reserved.
+ */
+/dts-v1/;
+/plugin/;
+
+#include <dt-bindings/interrupt-controller/arm-gic.h>
+
+/ {
+	fragment@0 {
+		target-path = "/soc@0/usb@4ef8800";
+		#address-cells = <2>;
+		#size-cells = <2>;
+
+		__overlay__ {
+			compatible = "qcom,qcm2290-dwc3", "qcom,snps-dwc3";
+			reg = <0 0x04e00000 0 0xd100>;
+			interrupts-extended = <&intc GIC_SPI 255 IRQ_TYPE_LEVEL_HIGH>,
+					      <&intc GIC_SPI 260 IRQ_TYPE_LEVEL_HIGH>,
+					      <&mpm 12 IRQ_TYPE_LEVEL_HIGH>;
+			interrupt-names = "dwc_usb3",
+					  "hs_phy_irq",
+					  "ss_phy_irq";
+			iommus = <&apps_smmu 0x120 0x0>;
+			phys = <&usb_hsphy>,
+			       <&usb_qmpphy>;
+			phy-names = "usb2-phy",
+				    "usb3-phy";
+		};
+	};
+};
